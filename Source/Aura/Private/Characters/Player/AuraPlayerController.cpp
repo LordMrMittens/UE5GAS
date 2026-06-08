@@ -2,7 +2,7 @@
 
 
 #include "Characters/Player/AuraPlayerController.h"
-#include "AuraPlayerController.h"
+#include "EnhancedInputSubsystems.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -13,4 +13,16 @@ void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(InputMappingContext);
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+	check(Subsystem);
+	Subsystem->AddMappingContext(InputMappingContext,0);
+
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+
+	FInputModeGameAndUI InputModeData;
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputModeData.SetHideCursorDuringCapture(false);
+	SetInputMode(InputModeData);
 }
